@@ -1,0 +1,28 @@
+```PROC close_gripper(num i)
+    err:=1;
+    WHILE err <> 0 DO
+        TEST i
+            CASE 1:
+                err:= gripper_bottom_close();
+            CASE 2:
+                err:= gripper_top_close();
+            CASE 3:
+                err:= gripper_band_close();
+            CASE 4:
+                err:= make_vacuum();
+        ENDTEST
+        IF err <> 0 THEN 
+            SetDO rbt_anomaly, 1;
+            check_error_close(err);
+            RETURN;
+        ELSE 
+            SetDO rbt_anomaly, 0;        
+        ENDIF  
+    ENDWHILE
+ENDPROC
+
+/* Documentation:
+- This procedure attempts to close a gripper based on input parameter i.
+- It loops until the operation succeeds (err = 0) or an error is handled and reported.
+- The function sets a digital output indicating whether an anomaly has occurred during the attempt. */
+```
